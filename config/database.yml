@@ -80,6 +80,6 @@ test:
 #
 production:
   <<: *default
-  database: windy_ddd_production
-  username: myapp
+  database: <%= ENV['WINDY_DDD_DATABASE_NAME'] %>
+  username: <%= ENV['WINDY_DDD_DATABASE_USERNAME'] %>
   password: <%= ENV['WINDY_DDD_DATABASE_PASSWORD'] %>

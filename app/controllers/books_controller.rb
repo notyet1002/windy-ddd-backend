@@ -17,7 +17,7 @@ class BooksController < ApplicationController
   # POST /books
   def create
     command = Domain::Commands::CreateBook.new(book_params)
-    handle(command)
+    @command_bus.send(command)
 
     render status: :created
   end
@@ -25,7 +25,7 @@ class BooksController < ApplicationController
   # PATCH/PUT /books/1
   def update
     command = Domain::Commands::UpdateBookGeneralInfo.new(book_params)
-    handle(command)
+    @command_bus.send(command)
 
     render status: :accepted
   end
@@ -33,7 +33,7 @@ class BooksController < ApplicationController
   # DELETE /books/1
   def destroy
     command = Domain::Commands::DeleteBook.new(book_params)
-    handle(command)
+    @command_bus.send(command)
 
     render status: :no_content
   end

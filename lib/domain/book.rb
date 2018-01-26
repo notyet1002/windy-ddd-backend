@@ -6,17 +6,13 @@ module Domain
 
     def initialize(uuid = SecureRandom.uuid)
       @uuid = uuid
-      @state = :draft
     end
 
     def create(title, author, published_date)
-      raise AlreadyCreated unless state == :draft
-
       apply Events::BookCreated.create(@uuid, title, author, published_date)
     end
 
     def update_general_info(product_id)
-      raise AlreadyCreated unless state == :draft
       apply Events::UpdateBookGeneralInfo.create(@uuid, title, author, published_date)
     end
 

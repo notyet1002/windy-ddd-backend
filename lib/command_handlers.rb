@@ -1,4 +1,4 @@
-module CommandHandlers
+class CommandHandlers
 
   def handle(command)
     command.validate!

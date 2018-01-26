@@ -30,6 +30,9 @@ module WindyDddBackend
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    # config auto load
+    config.autoload_paths += %W(#{config.root}/lib)
+
     config.middleware.insert_before 0, Rack::Cors do
       allow do
         origins '*'

@@ -16,34 +16,24 @@ class BooksController < ApplicationController
 
   # POST /books
   def create
-    @command = Contracts::Commands::Book::CreateBookCommand.new(
-        book_params[:uuid],
-        book_params[:title],
-        book_params[:author]
-    )
-
-    @command_bus.send(CommandHandlers::BookCommandHandler.name, @command)
+    command = Domain::Commands::CreateBook.new(book_params)
+    handle(command)
 
     render status: :created
   end
 
   # PATCH/PUT /books/1
   def update
-    @command = Contracts::Commands::Book::UpdateBookGeneralInfoCommand.new(
-        params[:id],
-        book_params[:title],
-        book_params[:author],
-        book_params[:published_date]
-    )
-    @command_bus.send(CommandHandlers::BookCommandHandler.name, @command)
+    command = Domain::Commands::UpdateBookGeneralInfo.new(book_params)
+    handle(command)
 
     render status: :accepted
   end
 
   # DELETE /books/1
   def destroy
-    @command = Contracts::Commands::Book::DeleteBookCommand.new(params[:id])
-    @command_bus.send(CommandHandlers::BookCommandHandler.name, @command)
+    command = Domain::Commands::DeleteBook.new(book_params)
+    handle(command)
 
     render status: :no_content
   end
@@ -56,6 +46,8 @@ class BooksController < ApplicationController
 
   # Only allow a trusted parameter "white list" through.
   def book_params
-    params.require(:book).permit(:uuid, :title, :author, :published_date, :is_active, :count)
+    args = params.require(:book).permit(:uuid, :title, :author, :published_date)
+
+    {uuid: args[:uuid], title: args[:title], author: args[:author], published_date: args[:published_date]}
   end
 end
